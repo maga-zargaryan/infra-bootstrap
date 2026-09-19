@@ -1,0 +1,35 @@
+# ==========================================
+# IDE / Editor Files (Ignore)
+# ==========================================
+.idea/
+*.iml
+
+# ==========================================
+# Config Secrets (Ignore your live variables)
+# ==========================================
+config/bootstrap.tfvars
+
+# ==========================================
+# Terraform Local Files (Never Commit!)
+# ==========================================
+# Ignore the local provider cache in the terraform folder
+terraform/.terraform/
+
+# Ignore the state files in the terraform folder (They are in S3 now!)
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+
+# Ignore any crash logs
+terraform/crash.log
+terraform/crash.*.log
+
+# ==========================================
+# System / Editor Files
+# ==========================================
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
