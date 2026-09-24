@@ -27,3 +27,19 @@ variable "workload_repo" {
   type    = string
   default = "wordpress-infra"
 }
+
+variable "github_owner_id" {
+  type = string
+}
+
+variable "platform_repo_id" {
+  type = string
+}
+
+variable "ami_repo_id" {
+  type = string
+}
+
+variable "workload_repo_id" {
+  type = string
+}

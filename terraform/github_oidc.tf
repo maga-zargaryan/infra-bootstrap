@@ -10,11 +10,31 @@ resource "aws_iam_openid_connect_provider" "github" {
 
 locals {
   role_repos = {
-    platform_dev  = var.platform_repo
-    platform_prod = var.platform_repo
-    ami           = var.ami_repo
-    workload_dev  = var.workload_repo
-    workload_prod = var.workload_repo
+    platform_dev  = {
+      repo    = var.platform_repo
+      repo_id = var.platform_repo_id
+      env     = "development"
+    }
+    platform_prod = {
+      repo    = var.platform_repo
+      repo_id = var.platform_repo_id
+      env     = "production"
+    }
+    ami = {
+      repo    = var.ami_repo
+      repo_id = var.ami_repo_id
+      env     = null
+    }
+    workload_dev = {
+      repo    = var.workload_repo
+      repo_id = var.workload_repo_id
+      env     = null
+    }
+    workload_prod = {
+      repo    = var.workload_repo
+      repo_id = var.workload_repo_id
+      env     = null
+    }
   }
 }
 
@@ -36,9 +56,11 @@ resource "aws_iam_role" "github" {
           "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
         }
         StringLike = {
-          "token.actions.githubusercontent.com:sub" = [
-            "repo:${var.github_org}/${each.value}:ref:refs/heads/main"
-          ]
+          "token.actions.githubusercontent.com:sub" = (
+          each.value.env != null
+          ? "repo:${var.github_org}@${var.github_owner_id}/${each.value.repo}@${each.value.repo_id}:environment:${each.value.env}"
+          : "repo:${var.github_org}@${var.github_owner_id}/${each.value.repo}@${each.value.repo_id}:ref:refs/heads/main"
+          )
         }
       }
     }]
