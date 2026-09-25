@@ -15,11 +15,19 @@ locals {
       repo_id = var.platform_repo_id
       env     = "development"
     }
+
+    platform_prod_plan = {
+      repo    = var.platform_repo
+      repo_id = var.platform_repo_id
+      env     = "production-plan"
+    }
+
     platform_prod = {
       repo    = var.platform_repo
       repo_id = var.platform_repo_id
       env     = "production"
     }
+
     ami = {
       repo    = var.ami_repo
       repo_id = var.ami_repo_id
