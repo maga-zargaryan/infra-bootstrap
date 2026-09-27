@@ -1,9 +1,13 @@
-# Copy to config/bootstrap.tfvars and replace these values.
 aws_region        = "REPLACE_WITH_AWS_REGION"
 state_bucket_name = "REPLACE_WITH_GLOBALLY_UNIQUE_STATE_BUCKET"
 github_org        = "REPLACE_WITH_GITHUB_ORG_OR_USERNAME"
 
-# Usually keep these names unchanged unless your GitHub repositories use different names.
 platform_repo = "platform-infra"
-ami_repo      = "wordpress-ami"
-workload_repo = "wordpress-infra"
+ami_repo      = "java-ami"
+workload_repo = "java-infra"
+
+# Use the immutable GitHub numeric owner/repository IDs.
+github_owner_id   = "REPLACE_WITH_GITHUB_OWNER_ID"
+platform_repo_id = "REPLACE_WITH_PLATFORM_REPO_ID"
+ami_repo_id      = "REPLACE_WITH_JAVA_AMI_REPO_ID"
+workload_repo_id = "REPLACE_WITH_JAVA_INFRA_REPO_ID"
