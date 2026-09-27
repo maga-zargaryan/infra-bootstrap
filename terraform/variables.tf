@@ -20,12 +20,12 @@ variable "platform_repo" {
 
 variable "ami_repo" {
   type    = string
-  default = "wordpress-ami"
+  default = "java-ami"
 }
 
 variable "workload_repo" {
   type    = string
-  default = "wordpress-infra"
+  default = "java-infra"
 }
 
 variable "github_owner_id" {

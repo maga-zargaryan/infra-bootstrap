@@ -10,24 +10,26 @@ resource "aws_iam_openid_connect_provider" "github" {
 
 locals {
   role_repos = {
-    platform_dev  = {
+    platform_dev = {
       repo    = var.platform_repo
       repo_id = var.platform_repo_id
       env     = "development"
     }
-
     platform_prod_plan = {
       repo    = var.platform_repo
       repo_id = var.platform_repo_id
       env     = "production-plan"
     }
-
     platform_prod = {
       repo    = var.platform_repo
       repo_id = var.platform_repo_id
       env     = "production"
     }
-
+    platform_shared = {
+      repo    = var.platform_repo
+      repo_id = var.platform_repo_id
+      env     = null
+    }
     ami = {
       repo    = var.ami_repo
       repo_id = var.ami_repo_id
@@ -36,12 +38,12 @@ locals {
     workload_dev = {
       repo    = var.workload_repo
       repo_id = var.workload_repo_id
-      env     = null
+      env     = "development"
     }
     workload_prod = {
       repo    = var.workload_repo
       repo_id = var.workload_repo_id
-      env     = null
+      env     = "production"
     }
   }
 }
@@ -65,9 +67,9 @@ resource "aws_iam_role" "github" {
         }
         StringLike = {
           "token.actions.githubusercontent.com:sub" = (
-          each.value.env != null
-          ? "repo:${var.github_org}@${var.github_owner_id}/${each.value.repo}@${each.value.repo_id}:environment:${each.value.env}"
-          : "repo:${var.github_org}@${var.github_owner_id}/${each.value.repo}@${each.value.repo_id}:ref:refs/heads/main"
+            each.value.env != null
+            ? "repo:${var.github_org}@${var.github_owner_id}/${each.value.repo}@${each.value.repo_id}:environment:${each.value.env}"
+            : "repo:${var.github_org}@${var.github_owner_id}/${each.value.repo}@${each.value.repo_id}:ref:refs/heads/main"
           )
         }
       }
@@ -79,6 +81,3 @@ resource "aws_iam_role" "github" {
     Purpose   = "GitHub Actions OIDC"
   }
 }
-
-# Bootstrap intentionally grants no platform/application permissions.
-# Each downstream repository owns the permissions attached to its deployment role.
