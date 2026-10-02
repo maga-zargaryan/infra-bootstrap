@@ -244,9 +244,10 @@ data "aws_iam_policy_document" "deploy_ami" {
     resources = ["arn:${local.partition}:ssm:${var.aws_region}:${local.account_id}:parameter/java-platform/ami/*"]
   }
 
+  # Teardown: AMIs are only deregistered when tagged as platform images.
   statement {
     sid       = "AmiCleanup"
-    actions   = ["ec2:DeregisterImage", "ec2:DeleteSnapshot"]
+    actions   = ["ec2:DeregisterImage"]
     resources = ["*"]
 
     condition {
@@ -254,6 +255,12 @@ data "aws_iam_policy_document" "deploy_ami" {
       variable = "aws:ResourceTag/Project"
       values   = ["java-platform"]
     }
+  }
+
+  statement {
+    sid       = "AmiSnapshotCleanup"
+    actions   = ["ec2:DeleteSnapshot"]
+    resources = ["arn:${local.partition}:ec2:${var.aws_region}::snapshot/*"]
   }
 }
 
