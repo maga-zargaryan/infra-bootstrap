@@ -116,3 +116,17 @@ resource "github_branch_protection" "main" {
     dismiss_stale_reviews           = true
   }
 }
+
+# Encrypts saved production plans uploaded as workflow artifacts (public repositories).
+resource "random_password" "plan_passphrase" {
+  length  = 48
+  special = false
+}
+
+resource "github_actions_secret" "plan_passphrase" {
+  for_each = toset(["platform", "workload"])
+
+  repository      = var.repositories[each.value].name
+  secret_name     = "TF_PLAN_PASSPHRASE"
+  plaintext_value = random_password.plan_passphrase.result
+}
