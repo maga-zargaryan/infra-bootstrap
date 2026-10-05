@@ -19,7 +19,7 @@ infra-bootstrap ─► platform-infra ─► java-ami ─► java-infra
 | Account baseline | EBS encryption by default, S3 account public access block, IAM Access Analyzer, multi-region CloudTrail |
 | DNS | Public hosted zone, **always imported, never created** (`prevent_destroy`) |
 | Cost | Monthly budget with email alerts (imported) |
-| GitHub | Environments, required reviewers, `AWS_ROLE_ARN`/`AWS_REGION` variables, `ALERT_EMAIL` secret, `main` branch protection |
+| GitHub | Environments, required reviewers, `AWS_ROLE_ARN`/`AWS_REGION` variables, `ALERT_EMAIL` secret, `PRODUCTION_ENABLED` switch, `main` branch protection |
 
 Values other repositories need are published to SSM Parameter Store under `/java-platform/`.
 
