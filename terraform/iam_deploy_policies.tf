@@ -245,17 +245,6 @@ data "aws_iam_policy_document" "deploy_ami" {
     resources = ["*"]
   }
 
-  statement {
-    sid = "BuildParameters"
-    actions = [
-      "ssm:PutParameter",
-      "ssm:DeleteParameter",
-      "ssm:AddTagsToResource",
-      "ssm:RemoveTagsFromResource",
-    ]
-    resources = ["arn:${local.partition}:ssm:${var.aws_region}:${local.account_id}:parameter/java-platform/ami/*"]
-  }
-
   # Teardown: AMIs are only deregistered when tagged as platform images.
   statement {
     sid       = "AmiCleanup"
