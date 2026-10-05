@@ -8,6 +8,26 @@ here is torn down when environments are destroyed.
 infra-bootstrap ─► platform-infra ─► java-ami ─► java-infra
 ```
 
+## Diagrams
+
+### How the four repositories fit together
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/repositories.dark.svg">
+  <img alt="How the four repositories fit together: Each column is one repository: its workflows, the AWS services it creates, and what happens in it, in order. Repositories hand values to each other only through SSM Parameter Store." src="docs/diagrams/repositories.light.svg">
+</picture>
+
+Each column is one repository: its workflows, the AWS services it creates, and what happens in it, in order. Repositories hand values to each other only through SSM Parameter Store.
+
+### How CI gets AWS credentials
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/ci-identity.dark.svg">
+  <img alt="How CI gets AWS credentials: GitHub issues an OIDC token naming the repository (by immutable ID) and the GitHub Environment; STS exchanges it only for the matching role. Roles a pipeline creates must carry the permissions boundary." src="docs/diagrams/ci-identity.light.svg">
+</picture>
+
+GitHub issues an OIDC token naming the repository (by immutable ID) and the GitHub Environment; STS exchanges it only for the matching role. Roles a pipeline creates must carry the permissions boundary.
+
 ## What it manages
 
 | Area | Resources |
