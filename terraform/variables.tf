@@ -71,3 +71,9 @@ variable "production_enabled" {
   description = "Whether pipelines plan and deploy production. False keeps production stages skipped."
   type        = bool
 }
+
+variable "cloudtrail_kms_enabled" {
+  description = "Encrypt CloudTrail logs with a customer-managed KMS key ($1/month). False uses SSE-S3 and schedules the key for deletion."
+  type        = bool
+  default     = true
+}
