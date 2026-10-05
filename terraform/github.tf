@@ -88,10 +88,10 @@ import {
 resource "github_actions_environment_secret" "alert_email" {
   for_each = { for k, v in local.github_environments : k => v if v.repo_key == "workload" }
 
-  repository      = github_repository_environment.this[each.key].repository
-  environment     = github_repository_environment.this[each.key].environment
-  secret_name     = "ALERT_EMAIL"
-  plaintext_value = var.alert_email
+  repository  = github_repository_environment.this[each.key].repository
+  environment = github_repository_environment.this[each.key].environment
+  secret_name = "ALERT_EMAIL"
+  value       = var.alert_email
 }
 
 resource "github_branch_protection" "main" {
@@ -126,7 +126,7 @@ resource "random_password" "plan_passphrase" {
 resource "github_actions_secret" "plan_passphrase" {
   for_each = toset(["platform", "workload"])
 
-  repository      = var.repositories[each.value].name
-  secret_name     = "TF_PLAN_PASSPHRASE"
-  plaintext_value = random_password.plan_passphrase.result
+  repository  = var.repositories[each.value].name
+  secret_name = "TF_PLAN_PASSPHRASE"
+  value       = random_password.plan_passphrase.result
 }
