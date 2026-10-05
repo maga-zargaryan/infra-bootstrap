@@ -195,6 +195,18 @@ data "aws_iam_policy_document" "deploy_platform" {
   }
 
   statement {
+    sid = "DatabaseSubnetGroups"
+    actions = [
+      "rds:CreateDBSubnetGroup",
+      "rds:ModifyDBSubnetGroup",
+      "rds:DeleteDBSubnetGroup",
+      "rds:AddTagsToResource",
+      "rds:RemoveTagsFromResource",
+    ]
+    resources = ["arn:${local.partition}:rds:${var.aws_region}:${local.account_id}:subgrp:java-platform-*"]
+  }
+
+  statement {
     sid = "PublishParameters"
     actions = [
       "ssm:PutParameter",
@@ -290,6 +302,19 @@ data "aws_iam_policy_document" "deploy_workload" {
       "backup-storage:MountCapsule",
     ]
     resources = ["*"]
+  }
+
+  # EFS automatic backups run under the account's AWS Backup default role.
+  statement {
+    sid       = "PassBackupRole"
+    actions   = ["iam:PassRole"]
+    resources = [aws_iam_role.backup_default.arn]
+
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["backup.amazonaws.com"]
+    }
   }
 
   # RDS stores and rotates the managed master password in Secrets Manager on the caller's behalf.

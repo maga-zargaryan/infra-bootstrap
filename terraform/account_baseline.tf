@@ -207,3 +207,33 @@ import {
   to = aws_budgets_budget.monthly
   id = "${local.account_id}:${var.budget_name}"
 }
+
+# AWS Backup default service role (used by EFS automatic backups). Created here
+# because pipeline roles may only create roles under their own name prefix.
+data "aws_iam_policy_document" "backup_assume" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["backup.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "backup_default" {
+  name               = "AWSBackupDefaultServiceRole"
+  path               = "/service-role/"
+  description        = "Default role for AWS Backup"
+  assume_role_policy = data.aws_iam_policy_document.backup_assume.json
+}
+
+resource "aws_iam_role_policy_attachment" "backup_default" {
+  for_each = toset([
+    "AWSBackupServiceRolePolicyForBackup",
+    "AWSBackupServiceRolePolicyForRestores",
+  ])
+
+  role       = aws_iam_role.backup_default.name
+  policy_arn = "arn:${local.partition}:iam::aws:policy/service-role/${each.value}"
+}
