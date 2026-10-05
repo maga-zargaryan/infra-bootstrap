@@ -36,7 +36,7 @@ GitHub issues an OIDC token naming the repository (by immutable ID) and the GitH
 | Release artifacts | `java-platform-artifacts-<account>-<region>`, versioned JARs under `java-app/<version>/` |
 | CI identity | GitHub OIDC provider, one role per repository × GitHub Environment |
 | Guardrails | `java-platform-permissions-boundary`, required on every IAM role a pipeline creates |
-| Account baseline | EBS encryption by default, S3 account public access block, IAM Access Analyzer, multi-region CloudTrail |
+| Account baseline | EBS encryption by default, S3 account public access block, IAM Access Analyzer, multi-region CloudTrail (customer-managed KMS key optional via `cloudtrail_kms_enabled`) |
 | DNS | Public hosted zone, **always imported, never created** (`prevent_destroy`) |
 | Cost | Monthly budget with email alerts (imported) |
 | GitHub | Environments, required reviewers, `AWS_ROLE_ARN`/`AWS_REGION` variables, `ALERT_EMAIL` secret, `PRODUCTION_ENABLED` switch, `main` branch protection |
