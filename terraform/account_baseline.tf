@@ -137,7 +137,12 @@ data "aws_iam_policy_document" "cloudtrail_key" {
   }
 }
 
+# Customer-managed key for CloudTrail logs ($1/month). When disabled, CloudTrail
+# keeps logging with the bucket's SSE-S3 encryption and the key is scheduled for
+# deletion; logs written with the old key become unreadable once it is deleted.
 resource "aws_kms_key" "cloudtrail" {
+  count = var.cloudtrail_kms_enabled ? 1 : 0
+
   description             = "CloudTrail log encryption"
   enable_key_rotation     = true
   deletion_window_in_days = 30
@@ -145,14 +150,26 @@ resource "aws_kms_key" "cloudtrail" {
 }
 
 resource "aws_kms_alias" "cloudtrail" {
+  count = var.cloudtrail_kms_enabled ? 1 : 0
+
   name          = "alias/cloudtrail"
-  target_key_id = aws_kms_key.cloudtrail.key_id
+  target_key_id = aws_kms_key.cloudtrail[0].key_id
+}
+
+moved {
+  from = aws_kms_key.cloudtrail
+  to   = aws_kms_key.cloudtrail[0]
+}
+
+moved {
+  from = aws_kms_alias.cloudtrail
+  to   = aws_kms_alias.cloudtrail[0]
 }
 
 resource "aws_cloudtrail" "account" {
   name                          = local.cloudtrail_name
   s3_bucket_name                = module.cloudtrail_bucket.id
-  kms_key_id                    = aws_kms_key.cloudtrail.arn
+  kms_key_id                    = var.cloudtrail_kms_enabled ? aws_kms_key.cloudtrail[0].arn : null
   is_multi_region_trail         = true
   include_global_service_events = true
   enable_log_file_validation    = true

@@ -25,3 +25,6 @@ budget_limit_usd = "1.0"
 
 # Production stages in platform-infra and java-infra run only when true.
 production_enabled = false
+
+# CloudTrail customer-managed key ($1/month). false = SSE-S3 only.
+cloudtrail_kms_enabled = true
