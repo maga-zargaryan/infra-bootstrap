@@ -1,13 +1,27 @@
 aws_region        = "REPLACE_WITH_AWS_REGION"
 state_bucket_name = "REPLACE_WITH_GLOBALLY_UNIQUE_STATE_BUCKET"
-github_org        = "REPLACE_WITH_GITHUB_ORG_OR_USERNAME"
 
-platform_repo = "platform-infra"
-ami_repo      = "java-ami"
-workload_repo = "java-infra"
+github_org          = "REPLACE_WITH_GITHUB_ORG_OR_USERNAME"
+github_owner_id     = "REPLACE_WITH_GITHUB_OWNER_ID"
+github_reviewer_ids = [0] # numeric IDs of production approvers
 
-# Use the immutable GitHub numeric owner/repository IDs.
-github_owner_id   = "REPLACE_WITH_GITHUB_OWNER_ID"
-platform_repo_id = "REPLACE_WITH_PLATFORM_REPO_ID"
-ami_repo_id      = "REPLACE_WITH_JAVA_AMI_REPO_ID"
-workload_repo_id = "REPLACE_WITH_JAVA_INFRA_REPO_ID"
+# Use the immutable GitHub numeric repository IDs: gh api repos/<owner>/<repo> --jq .id
+repositories = {
+  bootstrap = { name = "infra-bootstrap", id = "REPLACE" }
+  platform  = { name = "platform-infra", id = "REPLACE" }
+  ami       = { name = "java-ami", id = "REPLACE" }
+  workload  = { name = "java-infra", id = "REPLACE" }
+}
+
+# A repository needs a main branch before it can be protected.
+protected_repositories = ["bootstrap", "platform", "ami", "workload"]
+
+route53_zone_name = "REPLACE_WITH_EXISTING_ZONE_NAME"
+route53_zone_id   = "REPLACE_WITH_EXISTING_ZONE_ID"
+
+alert_email      = "REPLACE_WITH_ALERT_EMAIL"
+budget_name      = "REPLACE_WITH_EXISTING_BUDGET_NAME"
+budget_limit_usd = "1.0"
+
+# Production stages in platform-infra and java-infra run only when true.
+production_enabled = false

@@ -1,6 +1,0 @@
-# Used only after the initial local bootstrap has created the state bucket.
-bucket       = "REPLACE_WITH_STATE_BUCKET"
-key          = "bootstrap/terraform.tfstate"
-region       = "REPLACE_WITH_AWS_REGION"
-encrypt      = true
-use_lockfile = true

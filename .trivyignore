@@ -1,0 +1,5 @@
+# Audit and state buckets use SSE-S3 (AES-256). Customer-managed KMS keys add cost
+# and key-policy coupling without a requirement for them in this account.
+AVD-AWS-0132
+# Access logging for the state/artifact/trail buckets is covered by CloudTrail.
+AVD-AWS-0089

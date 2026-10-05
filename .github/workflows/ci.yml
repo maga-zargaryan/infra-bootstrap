@@ -1,0 +1,59 @@
+name: CI
+
+# Bootstrap is applied locally by an administrator (it creates the CI roles),
+# so CI only validates. No AWS credentials are used here.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.head_ref }}
+  cancel-in-progress: true
+
+env:
+  TERRAFORM_VERSION: "1.15.8"
+  TF_IN_AUTOMATION: "true"
+  TF_INPUT: "false"
+
+jobs:
+  ci:
+    name: ci
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      - uses: terraform-linters/setup-tflint@6ffdbaa3be476b3431f7275c26966ef32ff60337 # v6.3.2
+
+      - name: Format
+        run: terraform fmt -check -recursive -diff
+
+      - name: Validate
+        working-directory: terraform
+        run: |
+          terraform init -backend=false -lockfile=readonly
+          terraform validate
+
+      - name: Lint
+        run: |
+          tflint --init
+          tflint --recursive --minimum-failure-severity=warning
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Security scan
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: config
+          scan-ref: terraform
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+          trivyignores: .trivyignore
