@@ -11,5 +11,6 @@ config/bootstrap.tfvars
 *.tfstate
 *.tfstate.*
 *.tfplan
+tfplan
 crash.log
 crash.*.log

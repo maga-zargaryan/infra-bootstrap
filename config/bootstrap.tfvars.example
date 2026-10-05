@@ -22,3 +22,6 @@ route53_zone_id   = "REPLACE_WITH_EXISTING_ZONE_ID"
 alert_email      = "REPLACE_WITH_ALERT_EMAIL"
 budget_name      = "REPLACE_WITH_EXISTING_BUDGET_NAME"
 budget_limit_usd = "1.0"
+
+# Production stages in platform-infra and java-infra run only when true.
+production_enabled = false

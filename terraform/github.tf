@@ -130,3 +130,12 @@ resource "github_actions_secret" "plan_passphrase" {
   secret_name = "TF_PLAN_PASSPHRASE"
   value       = random_password.plan_passphrase.result
 }
+
+# Production stages in platform-infra and java-infra run only when enabled.
+resource "github_actions_variable" "production_enabled" {
+  for_each = toset(["platform", "workload"])
+
+  repository    = var.repositories[each.value].name
+  variable_name = "PRODUCTION_ENABLED"
+  value         = tostring(var.production_enabled)
+}

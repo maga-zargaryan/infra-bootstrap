@@ -66,3 +66,8 @@ variable "budget_limit_usd" {
   description = "Monthly cost budget limit in USD."
   type        = string
 }
+
+variable "production_enabled" {
+  description = "Whether pipelines plan and deploy production. False keeps production stages skipped."
+  type        = bool
+}
