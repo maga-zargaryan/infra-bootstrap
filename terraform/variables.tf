@@ -31,8 +31,8 @@ variable "repositories" {
   }))
 
   validation {
-    condition     = alltrue([for k in ["bootstrap", "platform", "ami", "workload"] : contains(keys(var.repositories), k)])
-    error_message = "repositories must define bootstrap, platform, ami and workload."
+    condition     = alltrue([for k in ["bootstrap", "platform", "ami", "workload", "app"] : contains(keys(var.repositories), k)])
+    error_message = "repositories must define bootstrap, platform, ami, workload and app."
   }
 }
 
@@ -76,4 +76,10 @@ variable "cloudtrail_kms_enabled" {
   description = "Encrypt CloudTrail logs with a customer-managed KMS key ($1/month). False uses SSE-S3 and schedules the key for deletion."
   type        = bool
   default     = true
+}
+
+variable "release_app_id" {
+  description = "ID of the release GitHub App that opens cross-repository pull requests. null until the app exists."
+  type        = number
+  default     = null
 }

@@ -1,6 +1,6 @@
 # infra-bootstrap
 
-> Part of **[Java Platform](https://github.com/maga-zargaryan/java-platform)** · **infra-bootstrap** → [platform-infra](https://github.com/maga-zargaryan/platform-infra) → [java-ami](https://github.com/maga-zargaryan/java-ami) → [java-infra](https://github.com/maga-zargaryan/java-infra)
+> Part of **[Java Platform](https://github.com/maga-zargaryan/java-platform)** · [java-app](https://github.com/maga-zargaryan/java-app) (source) · **infra-bootstrap** → [platform-infra](https://github.com/maga-zargaryan/platform-infra) → [java-ami](https://github.com/maga-zargaryan/java-ami) → [java-infra](https://github.com/maga-zargaryan/java-infra)
 >
 > See [java-platform](https://github.com/maga-zargaryan/java-platform) for how the four layers fit together.
 
@@ -50,6 +50,7 @@ Values other repositories need are published to SSM Parameter Store under `/java
 | java-ami | `shared` / `shared-plan` | `github-actions-ami[_plan]` | apply / read-only |
 | java-infra | `development` / `production` | `github-actions-workload_{dev,prod}` | apply |
 | java-infra | `*-plan` | `github-actions-workload_*_plan` | read-only |
+| java-app | `release` (tags `v*` only) | `github-actions-app_release` | write new releases under `java-app/*` only |
 
 - Trust is pinned to the immutable owner and repository IDs and the GitHub Environment (`StringEquals`).
 - Plan roles: `ReadOnlyAccess` + read of their own state + lock file.
@@ -82,3 +83,19 @@ Everything runs in one AWS account, isolated by VPC, KMS key, IAM role and state
 file per environment. The full Well-Architected setup is one account per
 environment under AWS Organizations; the code is account-agnostic so that move
 only changes configuration.
+
+## Release GitHub App (one-time, in the browser)
+
+Cross-repository pull requests (java-app → java-ami → java-infra, and the prod promotion) are opened by a
+GitHub App, because the built-in workflow token cannot write to other repositories and its pull requests
+do not trigger checks.
+
+1. GitHub → Settings → Developer settings → GitHub Apps → **New GitHub App**: name `java-platform-release`,
+   no webhook, repository permissions **Contents: read & write**, **Pull requests: read & write**.
+2. Install it on `java-ami` and `java-infra` (and `java-app`).
+3. Generate a private key, then store it as a secret in the three repositories:
+   ```bash
+   for r in java-app java-ami java-infra; do gh secret set RELEASE_APP_PRIVATE_KEY -R maga-zargaryan/$r < key.pem; done
+   ```
+4. Set `release_app_id` in `config/bootstrap.tfvars` and apply: bootstrap publishes `RELEASE_APP_ID` to the
+   three repositories. The private key stays out of Terraform state.

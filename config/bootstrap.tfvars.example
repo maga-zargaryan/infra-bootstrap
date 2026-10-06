@@ -11,10 +11,11 @@ repositories = {
   platform  = { name = "platform-infra", id = "REPLACE" }
   ami       = { name = "java-ami", id = "REPLACE" }
   workload  = { name = "java-infra", id = "REPLACE" }
+  app       = { name = "java-app", id = "REPLACE" }
 }
 
 # A repository needs a main branch before it can be protected.
-protected_repositories = ["bootstrap", "platform", "ami", "workload"]
+protected_repositories = ["bootstrap", "platform", "ami", "workload", "app"]
 
 route53_zone_name = "REPLACE_WITH_EXISTING_ZONE_NAME"
 route53_zone_id   = "REPLACE_WITH_EXISTING_ZONE_ID"
@@ -28,3 +29,6 @@ production_enabled = false
 
 # CloudTrail customer-managed key ($1/month). false = SSE-S3 only.
 cloudtrail_kms_enabled = true
+
+# Release GitHub App (create it in the GitHub UI first); null until then.
+release_app_id = null
