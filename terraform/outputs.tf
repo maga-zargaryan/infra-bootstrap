@@ -21,3 +21,7 @@ output "permissions_boundary_arn" {
 output "route53_zone_id" {
   value = aws_route53_zone.primary.zone_id
 }
+
+output "plan_store_bucket_name" {
+  value = module.plan_store.id
+}
