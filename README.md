@@ -1,6 +1,8 @@
 # infra-bootstrap
 
 > Part of **[Java Platform](https://github.com/maga-zargaryan/java-platform)** · **infra-bootstrap** → [platform-infra](https://github.com/maga-zargaryan/platform-infra) → [java-ami](https://github.com/maga-zargaryan/java-ami) → [java-infra](https://github.com/maga-zargaryan/java-infra)
+>
+> See [java-platform](https://github.com/maga-zargaryan/java-platform) for how the four layers fit together.
 
 Long-lived account foundation for the Java platform. Applied **locally by an
 administrator**, because it creates the roles every other pipeline uses. Nothing
@@ -11,15 +13,6 @@ infra-bootstrap ─► platform-infra ─► java-ami ─► java-infra
 ```
 
 ## Diagrams
-
-### How the four repositories fit together
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/overview.dark.svg">
-  <img alt="How the four repositories fit together: Each layer builds on the one above it and hands its outputs to the next through SSM Parameter Store." src="docs/diagrams/overview.light.svg">
-</picture>
-
-Each layer builds on the one above it and hands its outputs to the next through SSM Parameter Store.
 
 ### How CI gets AWS access
 
