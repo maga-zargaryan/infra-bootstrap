@@ -30,5 +30,3 @@ production_enabled = false
 # CloudTrail customer-managed key ($1/month). false = SSE-S3 only.
 cloudtrail_kms_enabled = true
 
-# Release GitHub App (create it in the GitHub UI first); null until then.
-release_app_id = null

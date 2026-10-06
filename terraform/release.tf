@@ -101,14 +101,3 @@ resource "github_actions_environment_variable" "app_release" {
   variable_name = each.key
   value         = each.value
 }
-
-# The release GitHub App opens the cross-repository pull requests (java-app → java-ami,
-# java-ami → java-infra, java-infra promote). Its private key is set per repository with
-# `gh secret set RELEASE_APP_PRIVATE_KEY` so it never lands in Terraform state.
-resource "github_actions_variable" "release_app_id" {
-  for_each = var.release_app_id == null ? toset([]) : toset(["app", "ami", "workload"])
-
-  repository    = var.repositories[each.value].name
-  variable_name = "RELEASE_APP_ID"
-  value         = tostring(var.release_app_id)
-}

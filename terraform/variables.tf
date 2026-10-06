@@ -78,8 +78,3 @@ variable "cloudtrail_kms_enabled" {
   default     = true
 }
 
-variable "release_app_id" {
-  description = "ID of the release GitHub App that opens cross-repository pull requests. null until the app exists."
-  type        = number
-  default     = null
-}
