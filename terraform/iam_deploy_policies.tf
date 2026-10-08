@@ -345,6 +345,19 @@ data "aws_iam_policy_document" "deploy_workload" {
     resources = ["*"]
   }
 
+  # Runtime settings the app AMI reads at boot (DB host, secret ARN, EFS IDs, ...).
+  statement {
+    sid = "AppRuntimeParameters"
+    actions = [
+      "ssm:PutParameter",
+      "ssm:DeleteParameter",
+      "ssm:DeleteParameters",
+      "ssm:AddTagsToResource",
+      "ssm:RemoveTagsFromResource",
+    ]
+    resources = ["arn:${local.partition}:ssm:${var.aws_region}:${local.account_id}:parameter/java-platform/*/app/*"]
+  }
+
   statement {
     sid       = "DnsRecords"
     actions   = ["route53:ChangeResourceRecordSets"]

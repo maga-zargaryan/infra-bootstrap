@@ -31,8 +31,8 @@ variable "repositories" {
   }))
 
   validation {
-    condition     = alltrue([for k in ["bootstrap", "platform", "ami", "workload"] : contains(keys(var.repositories), k)])
-    error_message = "repositories must define bootstrap, platform, ami and workload."
+    condition     = alltrue([for k in ["bootstrap", "platform", "ami", "workload", "app"] : contains(keys(var.repositories), k)])
+    error_message = "repositories must define bootstrap, platform, ami, workload and app."
   }
 }
 
@@ -77,3 +77,4 @@ variable "cloudtrail_kms_enabled" {
   type        = bool
   default     = true
 }
+
